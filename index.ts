@@ -13,6 +13,12 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
+app.post("/identify", (req:Request, res: Response) => {
+
+  res.send({ success: "Done" });
+
+})
+
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
   });
