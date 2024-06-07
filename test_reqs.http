@@ -1,0 +1,7 @@
+POST http://localhost:3000/identify HTTP/1.1
+content-type: application/json
+
+{
+    "email": "shamik@gmail.com",
+    "phoneNumber": "+91 9967153442"
+}
