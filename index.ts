@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import mysqlConn from "./helpers/conn";
+import dbConn from "./helpers/db";
+import { createContactDetail } from "./controllers/Contact";
 dotenv.config();
 
 const app: Express = express();
@@ -13,15 +14,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
-mysqlConn.connect((err) => {
-  if(err) throw err;
-  console.log("Connected to DB");
-});
+
 
 app.post("/identify", (req:Request, res: Response) => {
-
-  res.send({ success: "Done" });
-
+  createContactDetail(req,res, dbConn );
 })
 
 app.listen(port, () => {
