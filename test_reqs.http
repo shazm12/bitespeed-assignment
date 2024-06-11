@@ -1,7 +1,17 @@
-POST http://localhost:3000/identify HTTP/1.1
+###
+POST http://localhost:3000/api/contact/create HTTP/1.1
 content-type: application/json
 
 {
     "email": "shamik@gmail.com",
-    "phoneNumber": "+91 9967153442"
+    "phoneNumber": "9769477662"
+}
+
+###
+POST http://localhost:3000/api/contact/identify HTTP/1.1
+content-type: application/json
+
+{
+    "email": "shamik@gmail.com",
+    "phoneNumber": "9967153442"
 }
