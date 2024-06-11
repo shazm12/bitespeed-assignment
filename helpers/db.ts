@@ -11,9 +11,9 @@ const initDBConnection = async() => {
     };
     
     const conn = await mysql.createConnection(connOptions);
+    console.log("DB connection established!");
     return conn;
 };
 
-const db = initDBConnection().then((dbConn) => dbConn);
 
-export default db;
+export default initDBConnection;
