@@ -1,8 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import dbConn from "./helpers/db";
-import { createContactDetail } from "./controllers/Contact";
+
+import contactRouter from './routes/contact';
 dotenv.config();
 
 const app: Express = express();
@@ -16,9 +16,8 @@ app.get("/", (req: Request, res: Response) => {
 
 
 
-app.post("/identify", (req:Request, res: Response) => {
-  createContactDetail(req,res, dbConn );
-})
+app.use("/api/contact", contactRouter);
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
