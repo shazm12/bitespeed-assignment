@@ -11,7 +11,6 @@ const initDBConnection = async() => {
     };
     
     const conn = await mysql.createConnection(connOptions);
-    console.log("DB connection established!");
     return conn;
 };
 
