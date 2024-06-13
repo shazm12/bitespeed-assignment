@@ -16,9 +16,11 @@ The project is made using -
 <h1>Features</h1>
 The API has two endpoints- <br />
 
-1.  `/api/contact/create` - To create a new Contact Detials which will also link the current Contact Details with existing one based on phone number and email.
+1.  `/` - Responds with 'Express + Typescript Server'.
 
-2. `/api/contact/identify` - To identify all the Linked Contact Details in a specific format as given in instructions file. The endpoint would also make sure if in results there are two **primary** contacts to link then make the other one which was created later than the previous one as **secondary** and link to the previous primary contact.
+2.  `/api/contact/create` - To create a new Contact Details which will also link the current Contact Details with existing one based on phone number and email.
+
+3. `/api/contact/identify` - To identify all the Linked Contact Details in a specific format as given in instructions file. The endpoint would also make sure if in results there are two **primary** contacts to link then make the other one which was created later than the previous one as **secondary** and link to the previous primary contact.
 
 <h1>Improvements that can be made</h1>
 1. The logic for some of the code can be improved for eg, the part where we are making the primary contacts to secondary and linking to the previous primary contact.
