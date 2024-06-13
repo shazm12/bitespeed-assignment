@@ -1,4 +1,4 @@
--- Schema For the Customer Contact Detials Tables
+-- Schema For the Customer Contact Detail Table
 CREATE TABLE IF NOT EXISTS CustContactDetails (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     phone_number VARCHAR(255) NOT NULL, 
