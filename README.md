@@ -23,7 +23,9 @@ The API has two endpoints- <br />
 3. `/api/contact/identify` - To identify all the Linked Contact Details in a specific format as given in instructions file. The endpoint would also make sure if in results there are two **primary** contacts to link then make the other one which was created later than the previous one as **secondary** and link to the previous primary contact.
 
 <h1>Improvements that can be made</h1>
+
 1. The logic for some of the code can be improved for eg, the part where we are making the primary contacts to secondary and linking to the previous primary contact.
+
 2. The application is tightly coupled with MySQL, we can use an ORM library like Sequalize or TypeORM so that we can use with any database service.
 
 
