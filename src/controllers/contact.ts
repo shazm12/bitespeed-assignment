@@ -31,7 +31,7 @@ export const createContactDetail = async (req: Request, res: Response) => {
 
   await db
     .execute(
-      `INSERT INTO CustContactDetials(email,linkedId,linkPrecedence,phone_number) VALUES  (?,?,?,?)`,
+      `INSERT INTO CustContactDetails(email,linkedId,linkPrecedence,phone_number) VALUES  (?,?,?,?)`,
       [email, linkedId, linkPrecedence, phoneNumber]
     )
     .then((result: any) => {
@@ -114,7 +114,7 @@ const changeLinkedContactFromPrimaryToSecondary = async (
   const db = await getDBObj();
   await db
     .execute(
-      `UPDATE CustContactDetials
+      `UPDATE CustContactDetails
       SET linkPrecedence = 'secondary', linkedId = ?
       WHERE id = ?;`,
       [primaryLinkedId, linkedContact.id]
@@ -132,7 +132,7 @@ const changeLinkedContactFromPrimaryToSecondary = async (
 const getAllContactDetails = async (): Promise<ContactDetails[]> => {
   const db = await getDBObj();
   const [contactDetails] = await db.query<ContactDetails[]>(
-    "SELECT * FROM CustContactDetials"
+    "SELECT * FROM CustContactDetails"
   );
   return contactDetails;
 };
