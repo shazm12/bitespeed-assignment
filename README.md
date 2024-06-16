@@ -19,8 +19,26 @@ The API has two endpoints- <br />
 1.  `/` - Responds with 'Express + Typescript Server'.
 
 2.  `/api/contact/create` - To create a new Contact Details which will also link the current Contact Details with existing one based on phone number and email.
+Example of request body-
 
+```javascript
+{
+    "email": "amritabera01@gmail.com",
+    "phoneNumber": "212121"
+
+}
+```
+ 
 3. `/api/contact/identify` - To identify all the Linked Contact Details in a specific format as given in instructions file. The endpoint would also make sure if in results there are two **primary** contacts to link then make the other one which was created later than the previous one as **secondary** and link to the previous primary contact.
+Example of request body-
+```javascript
+{
+    "email": "shamik@gmail.com",
+    "phoneNumber": "979797"
+
+}
+```
+
 
 <h1>Improvements that can be made</h1>
 
