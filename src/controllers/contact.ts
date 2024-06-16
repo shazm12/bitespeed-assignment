@@ -93,7 +93,10 @@ export const identifyContactDetails = async (req: Request, res: Response) => {
     linkedContactsToChange.forEach(async(linkedContact: ContactDetails) => {
       await changeLinkedContactFromPrimaryToSecondary(primaryContatctId,linkedContact);
     });
-    secondaryContactIds.add(linkedContacts[1].id);
+    linkedContactsToChange.forEach((linkedContact: ContactDetails) => {
+      secondaryContactIds.add(linkedContact?.id);
+    });
+    
     
   }
 
