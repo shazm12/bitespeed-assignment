@@ -1,18 +1,18 @@
 ###
-POST https://bitespeed-assignment-yugh.onrender.com/api/contact/create HTTP/1.1
+POST https://bitespeed-assignment-yugh.onrender.com/create HTTP/1.1
 content-type: application/json
 
 {
-    "email": "amritabera01@gmail.com",
-    "phoneNumber": "212121"
+    "email": "biffsucks@hillvalley.edu", 
+    "phoneNumber": "717171"
 
 }
 
 ###
-POST https://bitespeed-assignment-yugh.onrender.com/api/contact/identify HTTP/1.1
+POST https://bitespeed-assignment-yugh.onrender.com/identify HTTP/1.1
 content-type: application/json
 
 {
-    "email":"amrita@gmail.com",
-    "phoneNumber": "212121"
+"email": "mcfly@hillvalley.edu",
+"phoneNumber": "123456"
 }
