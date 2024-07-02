@@ -5,41 +5,16 @@ import { IdentifyContactDetailsResponse } from "../interfaces/IdentifyContactDet
 
 const getDBObj = async () => await initDBConnection().then((dbConn) => dbConn);
 
-export const createContactDetail = async (req: Request, res: Response) => {
-  const { email, phoneNumber } = req.body;
+const createContactDetail = async (email: string, phoneNumber: string, linkedId: any, linkPrecedence: string) => {
 
   const db = await getDBObj();
 
-  const contactDetails = await getAllContactDetails();
-
-  let linkedId = null;
-  let linkPrecedence = "primary";
-  let error = null;
-  contactDetails.forEach((elem) => {
-    if (email == elem.email && phoneNumber == elem.phone_number) {
-      error = "Row already present!";
-    } else if (email == elem.email || phoneNumber == elem.phone_number) {
-      linkedId = elem.id;
-      linkPrecedence = "secondary";
-    }
-  });
-
-  if (error) {
-    res.status(400).send({ error });
-    return;
-  }
-
-  await db
+  return await db
     .execute(
       `INSERT INTO CustContactDetails(email,linkedId,linkPrecedence,phone_number) VALUES  (?,?,?,?)`,
       [email, linkedId, linkPrecedence, phoneNumber]
-    )
-    .then((result: any) => {
-      res.status(200).send({ success: "New Customer Contact Detail Created!" });
-    })
-    .catch((error: any) => {
-      res.status(400).send({ error });
-    });
+    );
+    
 };
 
 const checkIfThereisOnlyOnePrimaryLinkedContact = (
@@ -58,34 +33,69 @@ export const identifyContactDetails = async (req: Request, res: Response) => {
   const { email, phoneNumber } = req.body;
 
   const contactDetails = await getAllContactDetails();
-
+  let primaryContatctId: any = null;
+  let linkPrecedence = "primary";
+  let IsEmailPresent = false;
+  let isPhoneNumberPresent = false;
+  
   let linkedContacts: ContactDetails[] = [];
   contactDetails.forEach((elem) => {
-    if (email === elem.email) {
-      linkedContacts.push(elem);
-    } else if (phoneNumber === elem.phone_number) {
+    const emailMatch = email === elem.email;
+    const phoneMatch = phoneNumber === elem.phone_number;
+  
+    if (emailMatch || phoneMatch) {
+      if (emailMatch) IsEmailPresent = true;
+      if (phoneMatch) isPhoneNumberPresent = true;
+  
+      if (elem.linkPrecedence === "primary") {
+        primaryContatctId = elem.id;
+        linkPrecedence = "secondary";
+      }
+  
       linkedContacts.push(elem);
     }
   });
 
-  //sort linked Contact Details By createAt Timestamp
-  linkedContacts.sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-  );
 
-  // The first linked contact Detail created is always primary
-  const primaryContatctId = linkedContacts[0]?.id;
-  const secondaryContactIds = new Set<number>(
-    linkedContacts
-      .filter((contactDetail) => contactDetail?.linkPrecedence === "secondary")
-      .map((contactDetail) => contactDetail?.id)
-  );
-  const emails = new Set<string>(
-    linkedContacts.map((contactDetail) => contactDetail?.email)
-  );
-  const phoneNumbers = new Set<string>(
-    linkedContacts.map((contactDetail) => contactDetail?.phone_number)
-  );
+    //sort linked Contact Details By createAt Timestamp
+    linkedContacts.sort(
+      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+  
+    // The first linked contact Detail created is always primary
+    const secondaryContactIds = new Set<number>(
+      linkedContacts
+        .filter((contactDetail) => contactDetail?.linkPrecedence === "secondary")
+        .map((contactDetail) => contactDetail?.id)
+    );
+    const emails = new Set<string>(
+      linkedContacts.map((contactDetail) => contactDetail?.email)
+    );
+    const phoneNumbers = new Set<string>(
+      linkedContacts.map((contactDetail) => contactDetail?.phone_number)
+    );
+
+
+  // If both email and phone number are not present then create Contact Row and return
+  if((!IsEmailPresent || !isPhoneNumberPresent) && (email !== null && phoneNumber !== null) ) {
+    createContactDetail(email,phoneNumber, primaryContatctId, linkPrecedence)
+    .then((data:any) => {
+      const contact: IdentifyContactDetailsResponse = {
+        primaryContatctId: primaryContatctId,
+        emails: Array.from(emails.add(email)),
+        phoneNumbers: Array.from(phoneNumbers.add(phoneNumber)),
+        secondaryContactIds: Array.from(secondaryContactIds),
+      };
+      res.status(200).send({contact });
+    })
+    .catch((error:any) => {
+      res.status(400).send({ "error": "Error while creating Contact row: "+error });
+    })
+
+    return;
+    
+  }
+
 
   const isThereOnlyOnePrimaryLinkedContact = checkIfThereisOnlyOnePrimaryLinkedContact(linkedContacts);
   if (!isThereOnlyOnePrimaryLinkedContact) {
@@ -111,7 +121,7 @@ export const identifyContactDetails = async (req: Request, res: Response) => {
 };
 
 const changeLinkedContactFromPrimaryToSecondary = async (
-  primaryLinkedId: number,
+  primaryLinkedId: any,
   linkedContact: ContactDetails
 ): Promise<any> => {
   const db = await getDBObj();
