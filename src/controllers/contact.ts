@@ -74,17 +74,17 @@ export const identifyContactDetails = async (req: Request, res: Response) => {
   );
 
   // The first linked contact Detail created is always primary
-  const primaryContatctId = linkedContacts[0].id;
+  const primaryContatctId = linkedContacts[0]?.id;
   const secondaryContactIds = new Set<number>(
     linkedContacts
-      .filter((contactDetail) => contactDetail.linkPrecedence === "secondary")
-      .map((contactDetail) => contactDetail.id)
+      .filter((contactDetail) => contactDetail?.linkPrecedence === "secondary")
+      .map((contactDetail) => contactDetail?.id)
   );
   const emails = new Set<string>(
-    linkedContacts.map((contactDetail) => contactDetail.email)
+    linkedContacts.map((contactDetail) => contactDetail?.email)
   );
   const phoneNumbers = new Set<string>(
-    linkedContacts.map((contactDetail) => contactDetail.phone_number)
+    linkedContacts.map((contactDetail) => contactDetail?.phone_number)
   );
 
   const isThereOnlyOnePrimaryLinkedContact = checkIfThereisOnlyOnePrimaryLinkedContact(linkedContacts);
